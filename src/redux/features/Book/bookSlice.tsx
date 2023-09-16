@@ -10,10 +10,35 @@ const bookApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["book"],
     }),
+
     getBooks: builder.query({
-      query: () => ({
-        url: "/books",
-      }),
+      query: ({ searchTerm, genre, publicationYear }) => {
+        const params: Record<string, string> = {};
+        if (searchTerm) {
+          params.search = searchTerm;
+        }
+        if (genre) {
+          params.genre = genre;
+        }
+        if (publicationYear) {
+          params.publicationDate = publicationYear;
+        }
+
+        console.log("params", params);
+        // Construct the query URL with filters
+        let url = "/books";
+        const queryString = Object.entries(params)
+          .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+          .join("&");
+
+        if (queryString) {
+          url += `?${queryString}`;
+        }
+
+        return {
+          url,
+        };
+      },
       providesTags: ["book"],
     }),
 
