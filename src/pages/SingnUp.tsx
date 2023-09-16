@@ -13,7 +13,6 @@ interface FormData {
   role: string;
   contactNo: string;
   address: string;
-  profileImg: string;
 }
 
 const SignUp: React.FC = () => {
@@ -27,7 +26,6 @@ const SignUp: React.FC = () => {
     role: "",
     contactNo: "",
     address: "",
-    profileImg: "",
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -122,17 +120,6 @@ const SignUp: React.FC = () => {
               onChange={handleChange}
               className="appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="Address"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <input
-              type="text" // Change the input type to "text"
-              name="profileImg"
-              value={formData.profileImg}
-              onChange={handleChange}
-              className="appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Profile Image URL" // Update the placeholder
               required
             />
           </div>

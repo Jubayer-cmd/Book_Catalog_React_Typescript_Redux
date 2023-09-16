@@ -9,7 +9,6 @@ export interface signupData {
   role?: string;
   contactNo: string;
   address: string;
-  profileImg: string;
 }
 
 export interface loginData {
@@ -20,7 +19,7 @@ export interface loginData {
 const signup = async (data: signupData): Promise<any> => {
   try {
     const response = await axios.post(
-      `http://localhost:5000/api/v1/auth/signup`,
+      `https://book5-jubayer-cmd.vercel.app/api/v1/auth/signup`,
       data
     );
     console.log(response);
@@ -38,7 +37,7 @@ const signup = async (data: signupData): Promise<any> => {
 const signin = async (data: loginData): Promise<any> => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/v1/auth/signin",
+      "https://book5-jubayer-cmd.vercel.app/api/v1/auth/signin",
       data
     );
     const token = response.data.data.token;

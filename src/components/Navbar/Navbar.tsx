@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((state) => state.auth.data);
   return (
@@ -30,31 +31,41 @@ export default function Navbar() {
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
-              <li>
-                <a>Homepage</a>
-              </li>
-              <li>
-                <a>Portfolio</a>
-              </li>
-              <li>
-                <a>About</a>
-              </li>
+              <Link className="mx-5" to="/">
+                Home
+              </Link>
+              <Link className="mx-5 my-3" to="/wishlist">
+                Wishlist
+              </Link>
+              <Link className="mx-5" to="/addbooks">
+                Add Books
+              </Link>
             </ul>
           </div>
         </div>
         <div className="navbar-center">
-          <a className="btn btn-ghost normal-case text-xl">Books House</a>
+          <Link to={"/home"} className="btn btn-ghost normal-case text-xl">
+            Books House
+          </Link>
         </div>
         <div className="navbar-end">
           {token ? (
-            <button
-              className="btn btn-ghost bg-violet-500 text-white"
-              onClick={() => {
-                dispatch(logout());
-              }}
-            >
-              Logout
-            </button>
+            <div className="flex items-center justify-center">
+              <button
+                onClick={() => navigate("/addbooks")}
+                className=" p-1 rounded-md bg-violet-500 text-white mr-2"
+              >
+                +Books
+              </button>
+              <button
+                className=" p-1 rounded-md bg-violet-500 text-white"
+                onClick={() => {
+                  dispatch(logout());
+                }}
+              >
+                Logout
+              </button>
+            </div>
           ) : (
             <Link
               className="btn btn-ghost bg-violet-500 text-white"

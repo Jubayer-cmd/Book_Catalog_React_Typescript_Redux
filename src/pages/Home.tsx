@@ -1,10 +1,10 @@
 import Layout from "../Layout/Layout";
-import Carousel from "../components/Carousel/Carousel";
+import Book from "../components/Books/Book";
 
 export default function Home() {
   return (
     <Layout>
-      <Carousel />
+      <Book />
     </Layout>
   );
 }
