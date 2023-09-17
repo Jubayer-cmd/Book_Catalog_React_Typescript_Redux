@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import toast, { Toaster } from "react-hot-toast";
 import { AiFillDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer/Footer";
@@ -14,11 +15,13 @@ export default function WishList() {
 
   const removeFromWishlistHandler = (bookId: string) => {
     dispatch(removeFromWishlist(bookId));
+    toast.success("Book removed from wishlist");
   };
 
   return (
     <>
       <Navbar />
+      <Toaster position="bottom-center" reverseOrder={false} />
       <div style={{ minHeight: "80vh" }}>
         {wishlists.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">

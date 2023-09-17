@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FormEvent, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
@@ -49,7 +50,7 @@ export default function BookDetails() {
     } finally {
       // Set loading state back to false when the request is complete (whether success or error)
       setIsLoading(false);
-      document.getElementById("my_modal_3").close();
+      (document.getElementById("my_modal_3") as HTMLDialogElement)?.close();
     }
   };
 
@@ -64,12 +65,15 @@ export default function BookDetails() {
 
   const handleDelete = async (id: string) => {
     console.log(id);
-    const res = await toast.promise(deleteBook(id), {
+    const res = (await toast.promise(deleteBook(id), {
       loading: "Deleting...",
       success: <b>Books Deleted</b>,
       error: <b>Could not delete the book.</b>,
-    });
-    if (res?.data?.success) {
+    })) as { data: { success: boolean } };
+
+    const success: boolean = res.data.success;
+
+    if (success) {
       setTimeout(() => {
         navigate("/home");
       }, 1000);
@@ -79,12 +83,16 @@ export default function BookDetails() {
   return (
     <>
       <Navbar />
-      <Toaster />
+      <Toaster position="bottom-center" reverseOrder={false} />
       <div className="container" style={{ minHeight: "80vh" }}>
         <div className="flex mt-3">
           <button
             className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mx-4"
-            onClick={() => document.getElementById("my_modal_3").showModal()}
+            onClick={() =>
+              (
+                document.getElementById("my_modal_3") as HTMLDialogElement
+              )?.showModal()
+            }
           >
             Update book
           </button>
@@ -113,7 +121,7 @@ export default function BookDetails() {
                 </p>
                 <p className="text-gray-500 my-2">Genre: {data?.data?.genre}</p>
                 <p className="text-gray-500 my-2">
-                  Publication Date: {data?.data?.publicationDate}
+                  Publication Year: {data?.data?.publicationDate}
                 </p>
                 <p className="text-gray-500">Reviews: {data?.data?.reviews}</p>
               </div>

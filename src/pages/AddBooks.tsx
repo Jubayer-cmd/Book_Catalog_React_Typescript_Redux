@@ -31,12 +31,14 @@ const AddBooks = () => {
     setIsLoading(true);
 
     try {
-      const res = await toast.promise(postBooks(formData), {
+      const res = (await toast.promise(postBooks(formData), {
         loading: "Saving...",
         success: <b>New Book added</b>,
         error: <b>Could not add new book.</b>,
-      });
-      if (res?.data?.success === true) {
+      })) as { data: { success: boolean } };
+      const success: boolean = res.data.success;
+
+      if (success) {
         // Clear the form input fields by setting formData to an object with empty values
         setFormData({
           title: "",
@@ -57,7 +59,7 @@ const AddBooks = () => {
   return (
     <>
       <Navbar />
-      <Toaster />
+      <Toaster position="bottom-center" reverseOrder={false} />
 
       <div className="max-w-md mx-auto mb-5">
         <div className="mb-4">

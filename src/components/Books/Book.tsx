@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useGetBooksQuery } from "../../redux/features/Book/bookSlice";
@@ -13,6 +14,8 @@ export default function Book() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedPublicationYear, setSelectedPublicationYear] = useState("");
+
+  // Update this state to indicate whether a search or filter operation is in progress.
   const [isSearching, setIsSearching] = useState(false);
 
   const { data, isLoading, refetch } = useGetBooksQuery({
@@ -24,9 +27,10 @@ export default function Book() {
   console.log(data);
 
   useEffect(() => {
+    // Use the `isSearching` state to trigger a refetch when searching or filtering.
     if (isSearching) {
       refetch();
-      setIsSearching(false);
+      setIsSearching(false); // Reset the state after the refetch.
     }
   }, [searchTerm, selectedGenre, selectedPublicationYear, isSearching]);
 
@@ -49,15 +53,31 @@ export default function Book() {
     console.log("Selected Genre:", selectedGenre);
     console.log("Selected Publication Year:", selectedPublicationYear);
 
+    // Set `isSearching` to true when initiating a search or filter.
     setIsSearching(true);
   };
 
   const addToWishlistHandler = (book: any) => {
     dispatch(addToWishlist(book));
+    toast.success("Added to wishlist");
   };
+
+  function generateYearOptions() {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let year = currentYear; year >= 1900; year--) {
+      years.push(year);
+    }
+    return years.map((year) => (
+      <option key={year} value={year}>
+        {year}
+      </option>
+    ));
+  }
 
   return (
     <div className="container mx-auto mt-5">
+      <Toaster position="bottom-center" reverseOrder={false} />
       <div className="flex justify-between items-center">
         <input
           type="text"
@@ -87,20 +107,20 @@ export default function Book() {
         <option value="History">History</option>
         <option value="Comics">Comics</option>
         <option value="Fantasy">Fantasy</option>
+        <option value="Romance">Romance</option>
         {/* Populate options based on available genres */}
       </select>
 
-      {/* Publication Year Filter */}
       <select
         value={selectedPublicationYear}
         onChange={handlePublicationYearChange}
-        className="border border-gray-300 bg-white h-10 px-5 rounded-full text-sm focus:outline-none mt-2"
+        className="border border-gray-300 bg-white h-10 px-5 rounded-full text-sm focus:outline-none m-2"
       >
         <option value="">All Years</option>
-        {/* Populate options based on available years */}
+        {generateYearOptions()}
       </select>
 
-      {isLoading ? (
+      {isLoading || isSearching ? ( // Show loading when either initial load or searching/filtering.
         <p className="flex justify-center items-center text-violet-500 mt-5 text-3xl">
           Loading
           <span className="loading loading-dots loading-lg"></span>
@@ -130,7 +150,7 @@ export default function Book() {
               <p className="text-gray-500 mt-2">Author: {book.author}</p>
               <p className="text-gray-500">Genre: {book.genre}</p>
               <p className="text-gray-500">
-                Publication Date: {book.publicationDate}
+                Publication Year: {book.publicationDate}
               </p>
               <button
                 className="btn btn-primary mt-4 w-full hover:text-white"
